@@ -5,7 +5,10 @@
     "paths": {
       "@/*": [
         "./*"
-      ]
+      ],
+      // "tailwind.config": [
+      //   "./tailwind.config.js"
+      // ]
     }
   },
   "include": [

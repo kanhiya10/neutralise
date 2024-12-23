@@ -30,6 +30,88 @@ export default function StackLayout() {
          
         }}
       />
+
+<Stack.Screen
+        name="doseFrequency"
+        options={{
+          
+          title: 'doseFreq',
+          headerShown:false,
+         
+        }}
+      />
+      <Stack.Screen
+        name="dosageAlarm"
+        options={{
+          
+          title: 'dosageAlarm',
+          headerShown:false,
+         
+        }}
+      />
+       <Stack.Screen
+        name="setAlarmDaily"
+        options={{
+          
+          title: 'dailyAlarm',
+          headerShown:false,
+         
+        }}
+      />
+       <Stack.Screen
+        name="setAlarmCond"
+        options={{
+          
+          title: 'setAlarmCond',
+          headerShown:false,
+         
+        }}
+      />
+      <Stack.Screen
+        name="specificDay"
+        options={{
+          
+          title: 'specificDay',
+          headerShown:false,
+         
+        }}
+      />
+      <Stack.Screen
+        name="intervalDays"
+        options={{
+          
+          title: 'intervalDays',
+          headerShown:false,
+         
+        }}
+      />
+      {/* <Stack.Screen
+        name="cyclicDays"
+        options={{
+          
+          title: 'cyclic',
+          headerShown:false,
+         
+        }}
+      /> */}
+       <Stack.Screen
+        name="refill"
+        options={{
+          
+          title: 'refilling',
+          headerShown:false,
+         
+        }}
+      />
+      <Stack.Screen
+        name="completion"
+        options={{
+          
+          title: 'completion',
+          headerShown:false,
+         
+        }}
+      />
       
     </Stack>
    
