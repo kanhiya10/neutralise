@@ -1,73 +1,70 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import { Modal, ModalBackdrop, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@/components/ui/modal';
-import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
-import { ClockIcon } from '../ui/icon';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, Modal } from 'react-native'
+import {Button, ButtonText} from '@/components/ui/button'
+import React from 'react'
 import { useRouter } from 'expo-router';
-import {useSpring,animated} from '@react-spring/native'
-
-
+import Ionicons from '@expo/vector-icons/Ionicons';
 interface SkipModalProps {
     showModal: boolean;
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  }
+}
 
 export default function SkipModal({ showModal, setShowModal }: SkipModalProps) {
-    const router=useRouter();
-    
+    const router = useRouter();
 
-    
-  return (
-     <Modal
-        isOpen={showModal}
-        onClose={() => {
-          setShowModal(false)
-        }}
-      >
-        <ModalBackdrop />
-        <ModalContent className='border-[7px] border-[#E6E6E6]-100 h-[240px] pr-0 pl-0 pt-0 pb-0 w-[360px] rounded-[6px] bg-[#ffffff]'>
-        <ModalHeader className=" p-[24px] h-[69px] w-[360px] ">
-            {/* <Heading>Forgot password?</Heading> */}
-            <Text className='text-[14px] font-[500] text-[#262627]-900'>Proceed without refill?</Text>
-            {/* <Button className='h-[36px] w-[90px] rounded-[4px] p-[16px] gap-[8px] border-[1px] bg-[#307CBE]-500'><ButtonText className='text-[14px] font-[500] text-[#FEFEFF]'>Proceed without refill?</ButtonText></Button> */}
-            <ModalCloseButton className='w-[18px] h-[18px] '>
-                    <Ionicons name={'close-outline'} size={18} color={'#262627'} onPress={() => setShowModal(false)}/>   
-            </ModalCloseButton>
+    const handleCancel = () => {
+        setShowModal(false);
+    };
 
-          </ModalHeader>
-          <ModalBody className="h-[36px] w-[360px] pr-[24px] pl-[24px]" >
-            <Text className='text-[12px] font-[400] text-[#8C8C8C] '>You will not receive refill reminders for this medication.</Text>
-          </ModalBody>
-          <ModalFooter className="w-[360px] h-[84px] p-[24px] gap-[8px] ">
-            <Button
-            size={'sm'}
-            variant={'outline'}
-            action={'primary'}
-              onPress={() => {
-                setShowModal(false)
-              }}
-              className="w-[152px] h-[36px] rounded-[4px] p-[16px] gap-[8px] border-[1px] border-[#83B0D8]" 
-            >
-              <ButtonText className="text-[14px] font-[500] text-[#307CBE]-500">cancel</ButtonText>
-            </Button>
+    const handleProceed = () => {
+        setShowModal(false);
+        router.push('/(tabs)/(home)/completion');
+    };
 
-            <Button
-            size={'sm'}
-            variant={'solid'}
-            action={'primary'}
-              onPress={() => {
-                console.log('proceed');
-                setShowModal(false);
-                router.push(`/(tabs)/(home)/completion`);
-              }}
-              className="w-[152px] h-[36px] rounded-[4px] p-[16px] gap-[8px] border-[1px] bg-[#307CBE]-500" 
-            >
-              <ButtonText className='text-[14px] font-[500] text-[#FEFEFF]'>Yes</ButtonText>
-            </Button>
+    return (
+        <Modal
+            visible={showModal}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={() => setShowModal(false)}
+        >
+            <View className="flex-1 justify-center items-center bg-black/50">
+                <View className="w-[360px] h-[189px]  bg-[#FFFFFF] rounded-[6px] max-w-[360px] border-orange-500 border-2">
+                    {/* Header */}
+                    <View className="flex-row justify-between items-center border-2 h-[69px] w-[360px] p-[24px]">
+                        <Text className="text-[14px] font-[500] font-poppins text-[#262627]">
+                            Proceed Without Refill?
+                        </Text>
+                        <TouchableOpacity onPress={() => setShowModal(false)}>
+                            <Ionicons name={'close-outline'} size={18} color={'#8E8E8E'} onPress={() => setShowModal(false)}/>   
+                        </TouchableOpacity>
+                    </View>
 
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-  )
+                    {/* Body */}
+                    <View className=' h-[36px] w-[360px] pr-[24px] pl-[24px] gap-[8px] flex flex-row items-center border-2'>
+                    <Text className="text-[12px] font-[400] text-[#8C8C8C]">
+                        We wont be able to remind you to refill if you skip you to refill if you skip
+                    </Text>
+                    </View>
+                   
+
+                    {/* Footer */}
+                    <View className="flex-row gap-[8px] h-[84px] w-[360px] p-[24px] gap-[8px]">
+                        <Button size='sm' action='primary' variant='outline' 
+                            className=" h-[36px] w-[152px] justify-center items-center border-[1px] border-[#83B0D8] p-[16px] gap-[8px] rounded-[4px]"
+                            onPress={handleCancel}
+                        >
+                            <ButtonText className="text-[#307CBE] text-[14px] font-[500] font-poppins">Cancel</ButtonText>
+                        </Button>
+                        <Button size='sm' action='primary' variant='solid'  
+                            className=" h-[36px] w-[152px] justify-center items-center border-[1px] border-[#83B0D8] p-[16px] gap-[8px] rounded-[4px] bg-[#307CBE]"
+                            onPress={handleProceed}
+                        >
+                            <ButtonText className="text-[#307CBE] text-[14px] font-[500] font-poppins">Yes</ButtonText>
+                        </Button>
+
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    );
 }

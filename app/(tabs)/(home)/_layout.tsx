@@ -20,7 +20,14 @@ export default function StackLayout() {
         
         }}
       />
-  
+      <Stack.Screen
+        name="(logs)"
+        options={{
+          title: 'logs',
+          headerShown:false,
+        
+        }}
+      />
       <Stack.Screen
         name="dosageReminder"
         options={{

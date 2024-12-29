@@ -8,6 +8,7 @@ import { Button, ButtonText } from '@/components/ui/button';
 interface TimePickerProps {
   selectedTime: string;
   onTimeChange: (time: string) => void;
+  
 }
 
 export default function TimePicker({ selectedTime, onTimeChange }: TimePickerProps) {
@@ -22,7 +23,7 @@ export default function TimePicker({ selectedTime, onTimeChange }: TimePickerPro
     };
 
     const handleConfirm = (date: Date) => {
-        const formattedTime = format(date, 'hh:mm a');
+        const formattedTime = format(date, 'hh:mm aa').toUpperCase();
         onTimeChange(formattedTime);
         hideTimePicker();
     };
@@ -34,9 +35,9 @@ export default function TimePicker({ selectedTime, onTimeChange }: TimePickerPro
                 variant="outline"
                 action="primary"
                 onPress={showTimePicker}
-                className="w-[95px] h-[37px] rounded-[8px] border-[1px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[8px]"
+                className="w-[93px] h-[37px] rounded-[8px] border-[1px] pr-[10px] pl-[10px] pt-[8px] pb-[8px] gap-[8px]"//p is change
             >
-                <ButtonText className="font-medium text-sm ml-2">{selectedTime}</ButtonText>
+                <ButtonText className="font-[500] text-[14px] font-poppins text-[#307CBE]">{selectedTime}</ButtonText>
             </Button>
 
             <DateTimePickerModal

@@ -11,6 +11,7 @@ import CalendarPicker from '@/components/DosageComponents/calenderPicker';
 import { Increase } from '@/redux/platformCount_Slice';
 import { useRouter } from 'expo-router';
 import { useAppDispatch } from '@/redux/store';
+import { format } from 'date-fns';
 
 export default function IntervalDays() {
 
@@ -24,6 +25,10 @@ export default function IntervalDays() {
 
   const { dosageData, isLoading } = useAppSelector(state => state.Fetch)
 
+  const [isVisible, setIsVisible] = useState(false);
+
+  
+
 
   const handleRefill=()=>{
     // dispatch(Increase());
@@ -34,7 +39,7 @@ export default function IntervalDays() {
   return (
     <SharedLayout>
 
-      <View className='w-[397px] h-[575px] top-[30px] left-[16px] gap-[6px] '>
+      <View className='w-[397px] h-[575px] top-[30px] left-[16px] gap-[6px]  '>
         {/* Display the title if dosageData has a title */}
         {Object.keys(dosageData).length > 0 && dosageData.title && (
           <View className="h-[21px] w-[397px] gap-[10px]">
@@ -44,30 +49,42 @@ export default function IntervalDays() {
 
         {/* Conditional rendering based on the value of the `time` prop */}
 
-        <View className="h-[548px] w-[396px] rounded-[12px] border-[1px] p-[16px] gap-[16px] bg-[#ffffff] border-[#E6E6E6]-100">
+        <View className="h-[548px] w-[396px] rounded-[12px] border-[1px] p-[16px] gap-[16px] bg-[#ffffff] shadow-soft-1">
           {/* First reminder */}
           <View className="h-[27px] w-[364px] gap-[10px]">
             <Text className="text-[18px] font-[500] ">When would you like to be reminded?</Text>
           </View>
 
-          <View className={unit === 'hour' ? "h-[341px] w-[364px] gap-[20px]" : "h-[256px] w-[364px] gap-[20px]"}>
+          <View className={unit === 'hour' ? "h-[341px] w-[364px]" : "h-[256px] w-[364px] "}>
 
             <View className='h-[15px] w-[364px] gap-[9px]'>
               {unit === 'hour' ? <Text className="text-[10px] font-[400] text-[#737373]">INTAKE EVERY {time} HOUR</Text> : <Text className="text-[10px] font-[400] text-[#737373]">INTAKE EVERY {time} DAYS</Text>}
             </View>
 
-            <View className={unit === 'hour' ? "h-[324px] w-[364px] gap-[16px] border-[1px]" : "h-[239px] w-[364px] gap-[16px] border-[1px]"}>
+            <View className={unit === 'hour' ? "h-[324px] w-[364px] gap-[16px] " : "h-[239px] w-[364px] gap-[16px] s"}>
 
 
-              <View className="h-[69px] w-[364px] gap-[8px] border-[1px]">
+              <View className="h-[69px] w-[364px] gap-[8px]">
 
                 <View className="h-[24px] w-[364px] ">
                   <Text className="text-[16px] font-[400] text-[#404040]">Start date</Text>
                 </View>
-                <CalendarPicker 
+                {/* <CalendarPicker 
                   selectedDate={selectedDate}
                   onDateChange={setSelectedDate}
-                />
+                /> */}
+                 <Button
+        size="sm"
+        variant="outline"
+        action="primary"
+        onPress={() => setIsVisible(true)}
+        className="w-[100px] h-[37px] rounded-[8px] border-[1px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[8px] border-[#83B0D8]-300"
+      >
+        <ButtonIcon as={CalendarDaysIcon} />
+        <ButtonText className="font-[14px] font-[500] text-sm ml-2">
+          {format(selectedDate, 'dd MMM')}
+        </ButtonText>
+      </Button>
               </View>
 
 
@@ -149,6 +166,18 @@ export default function IntervalDays() {
           <ButtonText className="font-medium text-sm ml-2">Next</ButtonText>
         </Button>
       </View>
+
+      {isVisible && (
+        <CalendarPicker 
+        selectedDate={selectedDate}
+        onDateChange={(date)=>{
+          setSelectedDate(date);
+          setIsVisible(false);
+        }}
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        />
+      )}
       </View>
     </SharedLayout>
   )

@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import {useAppSelector,useAppDispatch} from '../../../redux/store';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import SharedLayout from '@/components/DosageComponents/sharedReminder';
@@ -16,6 +16,12 @@ const DosageAlarm:React.FC = () => {
   
 //  console.log(props);
      const {dosageData,isLoading}=useAppSelector(state=>state.Fetch)
+
+    //  useEffect(() => {
+    //   if (dosageData.frequency === 'Once daily' || dosageData.frequency === 'Twice daily') {
+    //     dispatch(Increase());
+    //   }
+    // }, [dosageData.frequency]);
   
   const renderComponent = () => {
     switch (dosageData.frequency) {

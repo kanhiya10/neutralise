@@ -35,8 +35,15 @@ const DosageReminder = () => {
 
   // },[medicalUnit])
 
-  const handlePills=(medicalVal:string)=>{
-    dispatch(Add({medicalUnit:medicalVal}))
+  const medicineUnits = [
+    { id: 'Pill', width: 'w-[84px]' },
+    { id: 'injection', width: 'w-[124px]' },
+    { id: 'Drops', width: 'w-[105px]' },
+    { id: 'Inhaler', width: 'w-[111px]' },
+    { id: 'Spray', width: 'w-[105px]' },
+  ];
+
+  const handleUnit=(medicalVal:string)=>{
     setMedicalUnit(medicalVal);
 
   }
@@ -45,9 +52,11 @@ const DosageReminder = () => {
     // console.log('ScreenNo : ',ScreenNo);
     // updateScreenNo();
     
-   if(medicalUnit)
+   if(medicalUnit){
+    dispatch(Add({medicalUnit:medicalUnit}))
     dispatch(Increase());
     router.push(`/(tabs)/(home)/doseFrequency`);
+   }
   }
 
   if(dosageData.title){
@@ -57,7 +66,7 @@ const DosageReminder = () => {
   return (
     <SharedLayout>
 
-      <View className='w-[397px] h-[572px] left-[16px] gap-[6px] mt-[30px] border-[1px] '>
+      <View className='w-[397px] h-[572px] left-[16px] gap-[6px] mt-[30px]  '>
 
         {
 
@@ -68,44 +77,66 @@ const DosageReminder = () => {
         )
 }
       
-      <View className='h-[545px] w-[397px] rounded-[12px] pt-[16px]  border-[1px] border-[#FFFFFF] bg-[#FFFFFF]'>
+      <View className='h-[545px] w-[397px] rounded-[12px] pt-[16px]  border-[1px] border-[#F2F1F1] bg-[#FFFFFF] shadow-soft-4'>
 
         <View className='h-[27px] w-[365px] gap-[10px] ml-[16px] ' >
         <Text className='text-[18px] font-[500] font-poppins text-[#404040]-800 '>Select medicine unit</Text>
         </View>
-      
+       
       {/* <View  className='flex flex-row  flex-wrap '> */}
       <View  className='h-[134px] w-[396px] pt-[16px] pr-[12px] pb-[16px] pl-[12px] gap-[12px]  flex flex-row flex-wrap'>
-      
 
-
-
-
-          <Button size='lg' variant='outline' action='primary'  className='h-[45px] w-[84px] rounded-[99px] border-[1px]  pt-[12px] pb-[12px] pl-[4px] pr-[4px] gap-[4px] ' onPress={handleFrequency}  >
-            <ButtonIcon as={PaperclipIcon} ></ButtonIcon>
-        <ButtonText className="font-medium text-sm ml-2">Pill</ButtonText>
+        
+      {/* <Button size='lg' variant='outline' action='primary'  onPress={()=>handleUnit('Pill')} className={ medicalUnit === 'Pill' ? 'h-[45px] w-[84px] rounded-[99px] border-[1px] border-[#639DCF]  pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] bg-[#FFFFFF]' : 'h-[45px] w-[84px] rounded-[99px] border-[0px]  pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] bg-[#F6F6F6]' }  >
+            <ButtonIcon as={PaperclipIcon} className='h-[11.95px] w-[11.95px]' color='#414040' ></ButtonIcon>
+        <ButtonText className={medicalUnit ==='Pill' ?"font-[500] text-[14px] font-poppins text-[#404040]-800":"font-[400] text-[14px] font-poppins text-[#404040]-800"}>Pill</ButtonText>
         </Button>
 
-        <Button size='lg' variant='outline' action='primary' isHovered onPressOut={()=>handlePills('injection')} className='h-[45px] w-[124px] rounded-[99px] border-[1px]  pt-[12px] pb-[12px] pl-[4px] pr-[4px] gap-[4px]] ' onPress={handleFrequency}  >
-            <ButtonIcon as={PaperclipIcon} ></ButtonIcon>
-        <ButtonText className="font-medium text-sm ml-2">injection</ButtonText>
+        <Button size='lg' variant='outline' action='primary'  onPress={()=>handleUnit('injection')} className={ medicalUnit === 'injection' ? 'h-[45px] w-[124px] rounded-[99px] border-[1px] border-[#105469]  pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] bg-[#FFFFFF]' : 'h-[45px] w-[124px] rounded-[99px] border-[0px]  pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] bg-[#F6F6F6]' }   >
+            <ButtonIcon as={PaperclipIcon} className='h-[12.8px] w-[12.8px]'color='#414040' ></ButtonIcon>
+        <ButtonText className={medicalUnit ==='injection' ?"font-[500] text-[14px] font-poppins text-[#404040]-800":"font-[400] text-[14px] font-poppins text-[#404040]-800"}>injection</ButtonText>
         </Button>
 
-        <Button size='lg' variant='outline' action='primary' isHovered onPressOut={()=>handlePills('Drops')} className='h-[45px] w-[105px] rounded-[99px] border-[1px]  pt-[12px] pb-[12px] pl-[4px] pr-[4px] gap-[4px] ' onPress={handleFrequency}  >
-            <ButtonIcon as={PaperclipIcon} ></ButtonIcon>
-        <ButtonText className="font-medium text-sm ml-2">Drops</ButtonText>
+        <Button size='lg' variant='outline' action='primary'  onPress={()=>handleUnit('Drops')} className={ medicalUnit === 'Drops' ? 'h-[45px] w-[105px] rounded-[99px] border-[1px] border-[#105469]  pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] bg-[#FFFFFF]' : 'h-[45px] w-[105px] rounded-[99px] border-[0px]  pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] bg-[#F6F6F6]' }  >
+            <ButtonIcon as={PaperclipIcon} className='h-[14px] w-[10px]' color='#414040' ></ButtonIcon>
+        <ButtonText className={medicalUnit ==='Drops' ?"font-[500] text-[14px] font-poppins text-[#404040]-800":"font-[400] text-[14px] font-poppins text-[#404040]-800"}>Drops</ButtonText>
         </Button>
 
-        <Button size='lg' variant='outline' action='primary' isHovered  onPressOut={()=>handlePills('Inhaler')} className='h-[45px] w-[111px] rounded-[99px] border-[1px]  pt-[12px] pb-[12px] pl-[4px] pr-[4px] gap-[4px] ' onPress={handleFrequency}  >
-            <ButtonIcon as={PaperclipIcon} ></ButtonIcon>
-        <ButtonText className="font-medium text-sm ml-2">Inhaler</ButtonText>
+        <Button size='lg' variant='outline' action='primary'   onPress={()=>handleUnit('Inhaler')} className={ medicalUnit === 'Inhaler' ? 'h-[45px] w-[111px] rounded-[99px] border-[1px] border-[#105469]  pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] bg-[#FFFFFF]' : 'h-[45px] w-[111px] rounded-[99px] border-[0px]  pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] bg-[#F6F6F6]' }  >
+            <ButtonIcon as={PaperclipIcon} className='h-[14px] w-[12.46px]' color='#231F20' ></ButtonIcon>
+        <ButtonText className={medicalUnit ==='Inhaler' ?"font-[500] text-[14px] font-poppins text-[#404040]-800":"font-[400] text-[14px] font-poppins text-[#404040]-800"}>Inhaler</ButtonText>
         </Button>
 
-        <Button size='lg' variant='outline' action='primary' isHovered onPressOut={()=>handlePills('Spray')} className='h-[45px] w-[105px] rounded-[99px] border-[1px]  pt-[12px] pb-[12px] pl-[4px] pr-[4px] gap-[4px] ' onPress={handleFrequency}  >
-            <ButtonIcon as={PaperclipIcon} ></ButtonIcon>
-        <ButtonText className="font-medium text-sm ml-2">Spray</ButtonText>
-        </Button> 
+        <Button size='lg' variant='outline' action='primary'  onPress={()=>handleUnit('Spray')} className={ medicalUnit === 'Spray' ? 'h-[45px] w-[105px] rounded-[99px] border-[1px] border-[#105469]  pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] bg-[#FFFFFF]' : 'h-[45px] w-[105px] rounded-[99px] border-[0px]  pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] bg-[#F6F6F6]' }   >
+            <ButtonIcon as={PaperclipIcon} className='h-[14px] w-[11px]' color='#535252' ></ButtonIcon>
+        <ButtonText className={medicalUnit ==='Spray' ?"font-[500] text-[14px] font-poppins text-[#404040]-800":"font-[400] text-[14px] font-poppins text-[#404040]-800"}>Spray</ButtonText>
+        </Button>  */}
 
+{medicineUnits.map((unit) => (
+          <Button
+            key={unit.id}
+            size='lg'
+            variant='outline'
+            action='primary'
+            onPress={() => handleUnit(unit.id)}
+            className={`${unit.width} h-[45px] rounded-[99px] pt-[12px] pb-[12px] pl-[20px] pr-[20px] gap-[8px] ${
+              medicalUnit === unit.id
+                ? 'border-[1px] border-[#639DCF] bg-[#FFFFFF]'
+                : 'border-[0px] bg-[#F6F6F6]'
+            }`}
+          >
+            <ButtonIcon as={PaperclipIcon} className='h-[11.95px] w-[11.95px]' color='#414040' />
+            <ButtonText 
+              className={`${
+                medicalUnit === unit.id
+                  ? "font-[500]"
+                  : "font-[400]"
+              } text-[14px] font-poppins text-[#404040]-800`}
+            >
+              {unit.id}
+            </ButtonText>
+          </Button>
+        ))}
 
           
        

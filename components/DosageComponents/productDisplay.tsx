@@ -37,12 +37,15 @@ const ProductDisplay:React.FC<ProductsType>=({Products})=> {
     }
     
   return (
-    <View className="h-[900px] border-[1px] border-[#F6F6F6]  bg-white  ">
+    <View className="h-[900px]   bg-white  ">
      {
+      Products.length>0 && 
         Products.map((item:itemsType,index)=>(
-            <View key={item.id} className='h-[40px] w-[396px] border-b-[1px] border-[#F6F6F6] flex flex-row justify-between items-center'>
-                <Text className='text-lg font-light ml-5'>{item.title}</Text>
-                <Ionicons name={ Products.length>1?"chevron-forward-outline":"add-outline"} className='mr-5' size={25} color={'black'} onPress={()=>handleReminder(item.title)}/>
+            <View key={item.id} className='h-[40px] w-[396px] border-b-[1px] border-[#F6F6F6] left-[16px] pr-[12px] pl-[12px] gap-[8px]  flex flex-row items-center'>
+              <View className='h-[40px] w-[348px] pt-[8px] pb-[8px] '>
+                <Text className='text-[16px] font-[400] font-poppins text-[#737373]'>{item.title}</Text>
+              </View>
+              <Ionicons name={ Products.length>1?"chevron-forward-outline":"add-outline"} className='' size={12} color={'#242424'} onPress={()=>handleReminder(item.title)}/>
             </View>
         )
         )

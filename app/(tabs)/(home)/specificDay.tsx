@@ -1,27 +1,54 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import SharedLayout from '@/components/DosageComponents/sharedReminder';
+import CalendarPicker from '@/components/DosageComponents/calenderPicker';
 import { useAppSelector } from '@/redux/store';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
 import { CalendarDaysIcon } from '@/components/ui/icon';
 import { useRouter } from 'expo-router';
 
 
+interface CyclicParams {
+  intake: number;
+  pause: number;
+  unit: string;
+}
+
 const SpecificDay=()=> {
 
   const params= useLocalSearchParams();
 
-  let selectedDays= params.selectedDays;
-   selectedDays= JSON.parse(params.selectedDays as string);
+  
+  
+  
 
   const [dose, setDose] = useState(1);
 
   const { dosageData, isLoading } = useAppSelector(state => state.Fetch)
 
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
   const router=useRouter();
+
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [cyclicData, setCyclicData] = useState<CyclicParams | null>(null);
+
+  useEffect(() => {
+    try {
+        if (params.selectedDays && !selectedDays.length) {
+            const parsedDays = JSON.parse(params.selectedDays as string);
+            setSelectedDays(parsedDays);
+        } else if (params.cyclicData && !cyclicData) {
+            const parsedCyclic = JSON.parse(params.cyclicData as string);
+            setCyclicData(parsedCyclic);
+        }
+    } catch (error) {
+        console.error('Error parsing params:', error);
+    }
+  }, [params]);
 
 
 
@@ -50,39 +77,51 @@ const SpecificDay=()=> {
 
         {/* Conditional rendering based on the value of the `time` prop */}
 
-        <View className="h-[548px] w-[396px] rounded-[12px] border-[1px] p-[16px] gap-[16px] bg-[#ffffff] border-[#E6E6E6]-100">
+        <View className="h-[548px] w-[396px] rounded-[12px] border-[1px] p-[16px] gap-[16px] bg-[#ffffff]  shadow-soft-1">
           {/* First reminder */}
           <View className="h-[27px] w-[364px] gap-[10px]">
             <Text className="text-[18px] font-[500] ">When would you like to be reminded?</Text>
           </View>
 
-          <View className= "h-[256px] w-[364px] gap-[20px]">
+          <View className= {selectedDays.length>0 ? "h-[256px] w-[364px]  " : "h-[105px] w-[364px] "} >
 
-            <View className='h-[15px] w-[364px] gap-[9px]'>
-              <Text className="text-[10px] font-[400] ">INTAKE ON {Array.isArray(selectedDays) ? selectedDays.join(', ').toUpperCase() : selectedDays.toUpperCase()}</Text>
+            <View className='h-[15px] w-[364px] gap-[9px] '>
+              <Text className="text-[10px] font-[400] font-poppins">
+                {selectedDays.length > 0 ? (`INTAKE ON ${selectedDays.join(', ').toUpperCase()}`) : (`${cyclicData?.intake} INTAKE DAYS, ${cyclicData?.pause} PAUSE DAYS`)}
+              </Text>
             </View>
 
-            <View className="h-[239px] w-[364px] gap-[16px]">
+            <View className={selectedDays.length>0 ? "h-[239px] w-[364px] gap-[16px]" : "h-[88px] w-[364px] gap-[16px]"} >
 
 
-              <View className="h-[69px] w-[364px] gap-[8px]">
+              <View className={selectedDays.length>0 ? "h-[69px] w-[364px] gap-[8px] " : "h-[88px] w-[364px] gap-[8px]"} >
 
                 <View className="h-[24px] w-[364px] ">
                   <Text className="text-[16px] font-[400] text-[#404040]">Start date</Text>
                 </View>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  action="primary"
-                  className="w-[100px] h-[37px] rounded-[8px] border-[1px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[8px] border-[#83B0D8]-300"
-                >
-                  <ButtonIcon as={CalendarDaysIcon} />
-                  <ButtonText className="font-[14px] font-[500] text-sm ml-2">Today</ButtonText>
-                </Button>
+                {selectedDays.length>0 ? (
+                 <CalendarPicker 
+                 selectedDate={selectedDate}
+                 onDateChange={setSelectedDate}
+               />
+                ) : (
+                  <View className='h-[56px] w-[128px] gap-[4px]'>
+                     <CalendarPicker 
+                  selectedDate={selectedDate}
+                  onDateChange={setSelectedDate}
+                />
+
+                <View className='h-[15px] w-[128px] gap-[4px] flex flex-row'>
+                  <Ionicons name="information-circle-outline" size={12} color={"#747474"} />
+                  <Text className='text-[10px] font-[400] font-poppins text-[#737373]'>Pause starts in 21 days</Text>
+                </View>
+
+                    </View>
+                )}
               </View>
 
-
-
+              { selectedDays.length>0 && (
+                <>
               <View className="h-[69px] w-[364px] gap-[8px]">
 
                 <View className="h-[24px] w-[364px] ">
@@ -117,6 +156,8 @@ const SpecificDay=()=> {
                   </View>
                 </View>
               </View>
+              </>
+              )}
 
             </View>
           </View>
