@@ -12,22 +12,23 @@ export default function StackLayout() {
   return (
    
     <Stack>
-      <Stack.Screen
+          <Stack.Screen 
         name="index"
         options={{
-          title: 'Home',
+          title: 'index',
           headerShown:false,
         
         }}
       />
       <Stack.Screen
-        name="(logs)"
+        name="home"
         options={{
-          title: 'logs',
+          title: 'home',
           headerShown:false,
         
         }}
       />
+  
       <Stack.Screen
         name="dosageReminder"
         options={{

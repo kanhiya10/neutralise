@@ -38,6 +38,7 @@ const WeekPicker = () => {
         ? subDays(week[0], 7)
         : addDays(week[0], 7);
     setWeek(getWeekDates(newDate));
+    setSelectedDate(newDate);
   };
 
   return (
@@ -102,7 +103,7 @@ const WeekPicker = () => {
         <CalendarPicker 
         selectedDate={selectedDate}
         onDateChange={(date)=>{
-          setSelectedDate(date);
+          handleDaySelect(date);
           setIsVisible(false);
         }}
         isVisible={isVisible}

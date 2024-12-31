@@ -1,227 +1,260 @@
-import { SafeAreaView, View, Text, ScrollView, TouchableOpacity,Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
-import Searchbar from '@/components/DosageComponents/searchbar';
-
-import ProductDisplay from '@/components/DosageComponents/productDisplay';
-import { LinearGradient } from '@/components/ui/gluestack-ui-provider/linear-gradient';
+import { View, Text, TouchableOpacity, Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { Button, ButtonText } from '@/components/ui/button';
+import ActiveMedicine from './activeMedicine';
+import WeekPicker from '@/components/Reminder/weekPicker';
 
-interface itemsType{
-  id:number;
-  title:string;
-
+interface MedicineReminder {
+  time: string;
+  name: string;
+  dose: number;
+  unit: string;
+  status: 'pending' | 'taken' | 'missed';
 }
 
-
-
-export default function HomeScreen() {
-  const [SearchText, setSearchText] = useState<string>('');
-
-  const[currentPage,setCurrentPage]=useState<'HomePage' | 'DisplayPage'>('HomePage');
-
-  const[Products,setProducts]=useState<itemsType[]>([]);
+const Index = () => {
   const router = useRouter();
-  if(Products){
-    console.log(Products);
-  }
+  const [currentPage, setCurrentPage] = useState<string>('Reminders');
 
-  useEffect(()=>{
-    const getProduct=()=>{
-      if(SearchText.length>0){
-      fetch(`https://dummyjson.com/products/search?q=${SearchText}&limit=10`)
-    .then(res => res.json())
-    .then((data)=>setProducts(data.products));
-      }
-      // else{
-      //   setProducts([]);
-      // }
-    }
-
-    getProduct()
-    
-  },[SearchText])
-
-  useEffect(()=>{
-    if(SearchText.length>0){
-      setCurrentPage('DisplayPage');
-    }
-  },[SearchText])
-
-  const handleSearchText = (newVal: string) => {
-    setSearchText(newVal);
+  const getCurrentTime = () => {
+    const date = new Date();
+    return date.toLocaleString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    }).toUpperCase();
   };
 
-  const emptySearchList=()=>{
-    setSearchText('');
-    setProducts([]);
-    setCurrentPage('HomePage');
-  }
+  const isTimePassed = (medicineTime: string) => {
+    const currentTime = new Date();
+    const [medTime, period] = medicineTime.split(' ');
+    const [medHour, medMinute] = medTime.split(':');
+    
+    let medHour24 = parseInt(medHour);
+    if (period === 'PM' && medHour24 !== 12) {
+      medHour24 += 12;
+    } else if (period === 'AM' && medHour24 === 12) {
+      medHour24 = 0;
+    }
+
+    const medicineDateTime = new Date();
+    medicineDateTime.setHours(medHour24, parseInt(medMinute), 0);
+    
+    const midnight = new Date();
+    midnight.setHours(23, 59, 59);
+    
+    if (currentTime >= midnight && medicineDateTime < midnight) {
+      return 'missed';
+    }
+    return currentTime >= medicineDateTime ? 'overdue' : 'upcoming';
+  };
+
+  const [medicines, setMedicines] = useState<MedicineReminder[]>([
+    {
+      time: '10:00 AM',
+      name: 'Hemantinic',
+      dose: 1,
+      unit: 'pill(s)',
+      status: 'pending'
+    },
+    {
+      time: '11:00 AM',
+      name: 'Hemantinic',
+      dose: 1,
+      unit: 'pill(s)',
+      status: 'pending'
+    },
+    {
+      time: '7:00 AM',
+      name: 'Hemantinic',
+      dose: 1,
+      unit: 'pill(s)',
+      status: 'pending'
+    }
+  ]);
+
+  const handleConfirmation = (index: number) => {
+    setMedicines(prev => prev.map((med, i) => 
+      i === index ? { ...med, status: 'taken' } : med
+    ));
+  };
+
+//   const handleSnooze = (index: number) => {
+//     setMedicines(prev => prev.map((med, i) => 
+//       i === index ? { ...med, status: 'snoozed' } : med
+//     ));
+//   };
+
+  useEffect(() => {
+    const checkMissedDoses = () => {
+      setMedicines(prev => prev.map(med => {
+        if (med.status === 'pending' && isTimePassed(med.time) === 'missed') {
+          return { ...med, status: 'missed' };
+        }
+        return med;
+      }));
+    };
+
+    checkMissedDoses();
+
+    const now = new Date();
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0);
+    const timeUntilMidnight = midnight.getTime() - now.getTime();
+
+    const timer = setTimeout(() => {
+      checkMissedDoses();
+      setInterval(checkMissedDoses, 24 * 60 * 60 * 1000);
+    }, timeUntilMidnight);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
-    // <View style={{flex:1}}>
-
-    //   {
-    //     Products.length>0 ? (
-    //       <LinearGradient colors={['rgba(255, 255, 255, 1)', 'rgba(195, 217, 236, 1)', 'rgba(48, 124, 190, 0.2)']} 
-    //       locations={[0.5,0.7,0.2]}
-    //       start={{ x: 1, y: 0 }}  
-    //       end={{ x: 0, y: 1 }}  
-          
-    //       className='flex-1'>
-      
-    //       <ScrollView className={
-          
-    //         "flex-1 pt-[44px] "
-    //       }>
-          
-          
-            
-    //         <Searchbar SearchText={SearchText} handleSearchText={handleSearchText} emptySearchList={emptySearchList} />
-      
-    //         {
-    //           Products.length>0 ?(
-    //             <ProductDisplay Products={Products}/>
-    //           ):(
-    //             <Instructor/>
-    //           )
-          
-    //         }
-      
-      
-    //         </ScrollView>
-    //          </LinearGradient>
-    //     ):(
-    //       <View className='flex-1 bg-[#EAF2F9] pt-[44px] '>
-            
-    //         <View className="w-[428px] h-[48px]  px-[16px] py-[12px] flex-row items-center gap-[12px] border-b border-[#F2F1F1] border-2">
-    //         <TouchableOpacity className="w-[20px] h-[20px]">
-    //           <Ionicons 
-    //             name="close-outline" 
-    //             size={24} 
-    //             color="#414040"
-    //             className='bottom-[2px]'
-                
-    //           />
-    //         </TouchableOpacity> 
-            
-    //         <Text className="font-poppins text-[16px] font-[500] text-[#262627]">
-    //           Dosage Reminder
-    //         </Text>
-    //       </View>
-
-    //       <Ionicons name='alarm-outline' size={20} color='#414040' className='position- absolute top-[60px] right-[35px]' onPress={()=>router.push('/(tabs)/(home)/(logs)/logsInfo')}/>
-
-    //       <Searchbar SearchText={SearchText} handleSearchText={handleSearchText} emptySearchList={emptySearchList} />
-      
-    //   {
-    //     Products.length>0 ?(
-    //       <ProductDisplay Products={Products}/>
-    //     ):(
-    //       <Instructor/>
-    //     )
-    
-    //   }
-           
-    //       </View>
-    //     )
-    //   }
-
-    
-   
-
-
-    //    </View>
-
-
-    
-
-
-
-
-    <View style={{flex:1}}>
+    <View className='flex-1 bg-[#FFFFFF]'>
+      <View className='h-[48px] w-[428px] mt-[44px] py-[12px] px-[16px] gap-[12px] flex-row items-center border-b-[1px] border-[#F2F1F1]'>
+        <TouchableOpacity onPress={()=>router.back()}>
+          <Ionicons name='chevron-back-outline' size={20} color='#414040'   />
+        </TouchableOpacity>
+        <View className='h-[24px] w-[364px] flex-col justify-center'>
+          <Text className='text-[16px] font-[500] text-[#262627]'>Dosage Reminder</Text>
+        </View>
+      </View>
 
       {
-        currentPage==='DisplayPage' ? (
-          <LinearGradient colors={['rgba(255, 255, 255, 1)', 'rgba(195, 217, 236, 1)', 'rgba(48, 124, 190, 0.2)']} 
-          locations={[0.5,0.7,0.2]}
-          start={{ x: 1, y: 0 }}  
-          end={{ x: 0, y: 1 }}  
-            
-          className='flex-1'>
+        medicines.length>0 ? (
+          <>
       
-          <ScrollView className={
-          
-            "flex-1 pt-[44px] "
-          }>
 
-            <View className='w-[428px] h-[40px] mt-[12px] px-[16px] gap-[10px]'>
-              <Searchbar SearchText={SearchText} handleSearchText={handleSearchText} emptySearchList={emptySearchList} currentPage={currentPage} />
-            </View>
+      <View className='w-[428px] h-[37px] mt-[12px] flex flex-row items-center justify-between'>
+        <View className={currentPage === 'Reminders' ? 'h-[37px] w-[214px] py-[8px] px-[16px] gap-[10px] border-b-[1px] border-[#307CBE] flex flex-row justify-center items-center' : 'h-[37px] w-[214px] py-[8px] px-[16px] gap-[10px]  flex flex-row justify-center items-center'}>
+          <TouchableOpacity onPress={()=>setCurrentPage('Reminders')}>
+            <Text className={currentPage === 'Reminders' ? 'text-[14px] font-[500] font-poppins  text-[#307CBE]' : 'text-[14px] font-[500] font-poppins '}>Reminders</Text>
+          </TouchableOpacity>
+        </View>
 
-            <ProductDisplay Products={Products}/>
+        <View className={currentPage === 'Active medicine' ? 'h-[37px] w-[214px] py-[8px] px-[16px] gap-[10px] border-b-[1px] border-[#307CBE] flex flex-row justify-center items-center' : 'h-[37px] w-[214px] py-[8px] px-[16px] gap-[10px]  flex flex-row justify-center items-center'}>
+          <TouchableOpacity onPress={()=>setCurrentPage('Active medicine')}>
+            <Text className={currentPage === 'Active medicine' ? 'text-[14px] font-[500] font-poppins  text-[#307CBE]' : 'text-[14px] font-[500] font-poppins '}>Active medicine</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
+      {currentPage === 'Reminders' ? (
+        <>
+          <View className='mt-[16px]'>
+            <WeekPicker />
+          </View>
 
-            </ScrollView>
-            </LinearGradient>
+{/* <View className='w-[428px] h-[131px] mt-[16px]  gap-[10px] bg-[#EAF2F9] border-2'>
+            <WeekPicker />
+          </View> */}
 
-            ):(
-              <View className='flex-1 bg-[#EAF2F9] pt-[44px] '>
+          {medicines.map((medicine, index) => (
+            <React.Fragment key={index}>
+              <Text className='text-[14px] font-[500] font-poppins text-[#404040] mt-[24px] ml-[16px]'>
+                {medicine.time}
+              </Text>
 
-                <View className='w-[428px] h-[48px] py-[12px] px-[16px] gap-[12px]  flex flex-row items-center'>
-                  <Ionicons name='close-outline' size={22} color='#414040' className='bottom-[3px]'/>
-                  <View className='h-[24px] w-[144px]'>
-                    <Text className='text-[16px] font-[500] font-poppins text-[#262627]'>Dosage Reminder</Text>
-                    </View>
+              <View className={ 
+                medicine.status === 'taken' ? 
+                  'w-[396px] h-[84px] mt-[4px] ml-[16px] rounded-[12px] p-[8px] gap-[16px] bg-[#FFFFFF] shadow-soft-1' :
+                medicine.status === 'missed' ?
+                  'w-[396px] h-[84px] mt-[4px] ml-[16px] rounded-[12px] p-[8px] gap-[16px] bg-[#FFFFFF] shadow-soft-1 border-[1px] border-[#FF6B6B]' :
+                medicine.status === 'pending' && isTimePassed(medicine.time) === 'overdue' ?
+                  'w-[396px] h-[130px] mt-[4px] ml-[16px] rounded-[12px] p-[8px] gap-[16px] bg-[#FFFFFF] shadow-soft-1' :
+                  'w-[396px] h-[84px] mt-[4px] ml-[16px] rounded-[12px] p-[8px] gap-[16px] bg-[#FFFFFF] shadow-soft-1'
+              }>
+                <View className='w-[148px] h-[46px] gap-[8px] flex flex-row'>
+                  <View className='w-[46px] h-[46px] rounded-[4px] p-[6px] gap-[10px] bg-[#EAF2F9] relative'>
+                    <Image source={require('@/assets/images/Shape.png')} 
+                      className='w-[17.92px] h-[17.92px] top-[7px] left-[8.5px]' 
+                      />
+
+                    {medicine.status === 'taken' && (
+                      <View className='w-[20px] h-[20px] bg-[#FFFFFF] rounded-[999px]  absolute  left-[32px] top-[-2px]'>
+                        <Image source={require('@/assets/images/Shape (2).png')} 
+                      className='w-[16px] h-[16px]' 
+                       />
+                        </View>
+                    )}
                   </View>
-
-                  <View className='w-[428px] h-[40px] mt-[16px] px-[16px] gap-[10px]'>
-              <Searchbar SearchText={SearchText} handleSearchText={handleSearchText} emptySearchList={emptySearchList} currentPage={currentPage} />
-            </View>
-
-
-            <View className='mt-[285px] left-[179px] h-[70px] w-[70px]'>
-            <Image source={require('../../../assets/images/search.png')} className="w-[52.49px] h-[52.49px] mt-[6.5px] ml-[6.5px] "/>
-              </View>
-
-              <View className='mt-[8px] left-[12px] h-[27px] w-[396px] flex flex-row items-center justify-center  '>
-                <Text className='text-[18px] font-[500] text-[#262627]'>
-                  Search Product to set reminder
-                </Text>
-
+                  <View className={medicine.status === 'taken' ? 
+                    'w-[326px] h-[68px] gap-[4px]' : 
+                    'w-[94px] h-[46px] gap-[4px]'}>
+                    <Text className='text-[16px] font-[500] font-poppins text-[#404040]'>{medicine.name}</Text>
+                    <Text className='text-[12px] font-[400] font-poppins text-[#737373]'>Take {medicine.dose} {medicine.unit}</Text>
+                    {medicine.status === 'taken' && (
+                      <Text className='text-[12px] font-[500] font-poppins text-[#348352]'>Taken at {medicine.time}</Text>
+                    )}
+                  </View>
                 </View>
 
-                <View className='w-[396px] h-[42px] mt-[8px] left-[16px]  '>
-                  <Text className='text-[14px] font-[400] font-poppins text-[#525252] text-center'>
-                    Lorem ipsum dolor sit amet consectetur. Maecenas socilis sit pulvinar in elit.
+                {medicine.status === 'pending' && isTimePassed(medicine.time) === 'overdue' && (
+                  <>
+                    <View className='w-[380px] h-[0px] border-[1px] border-[#F3F3F3]' />
+                    <View className='w-[380px] h-[36px] gap-[16px] flex flex-row'>
+                      <Button 
+                        size='sm' 
+                        variant='outline' 
+                        action='secondary' 
+                        className='w-[182px] h-[36px] rounded-[12px] border-[1px] border-[#C8F1D0] px-[16px] gap-[8px]'
+                        
+                      >
+                        <ButtonText className='text-[14px] font-[500] font-poppins text-[#8C8C8C]'>Snooze</ButtonText>
+                      </Button>
+                      <Button 
+                        size='sm' 
+                        variant='outline' 
+                        action='secondary' 
+                        className='w-[182px] h-[36px] rounded-[12px] border-1 px-[16px] gap-[8px] bg-[#A3E8B0]'
+                        onPress={() => handleConfirmation(index)}
+                      >
+                        <ButtonText className='text-[14px] font-[500] font-poppins text-[#404040]'>Confirm</ButtonText>
+                      </Button>
+                    </View>
+                  </>
+                )}
+
+                {medicine.status === 'missed' && (
+                  <Text className='text-[12px] font-[500] font-poppins text-[#FF6B6B]'>
+                    Missed dose
                   </Text>
-                  </View>
-
-                  <View className="h-[18px] w-[138px] mt-[20px] left-[145px] gap-[13px]  flex flex-row items-center justify-center ">
-  <View className="w-14 border-[1px] border-[#D3D3D3]" />
-  <Text className="text-[12px] font-[400]  text-[#525252]-700 text-center" >Or</Text>
-  <View className="w-14 border-[1px] border-[#D3D3D3]" />
-</View>
-
-<Button size='sm' variant='outline' action='primary' className='h-[36px] w-[162px] mt-[20px] left-[133.5px] rounded-[8px] px-[16px]  gap-[8px] border-[1px] border-[#83B0D8] flex flex-row items-center justify-center '>
-  <View className='w-[106px] h-[21px]  '>
-  <ButtonText className='text-[14px] font-[500] font-poppins text-[#307CBE] '> Scan your med </ButtonText>
-    </View>
-    <Image source={require('../../../assets/images/Shape (3).png')} className='w-[20px] h-[20px] '/>
-  
-  </Button>
-
-
-
-
+                )}
               </View>
-            )
+            </React.Fragment>
+          ))}
+        </>
+      ) : (
+        <ActiveMedicine />
+      )}
+      </>
+      ):(
+        <View>
+        <View className='w-[289.49px] h-[169.68px] mt-[188px] ml-[69px]'  >
+          <Image source={require('@/assets/images/NoReminders.png')} className='w-[289.49px] h-[169.68px]' />
+          </View>
+          <View className='w-[396px] h-[27px] mt-[19.32px] ml-[16px] flex flex-row justify-center items-center'>
+            <Text className='text-[18px] font-[500] font-poppins text-[#262627]'>No reminders</Text>
+          </View>
+          <View className='w-[396px] h-[21px] mt-[8px] ml-[16px] flex flex-row justify-center items-center'>
+            <Text className='text-[14px] font-[400] font-poppins text-[#525252]'>Add a medicine to get reminders</Text>
+            </View>
+          </View>
+      )
+    }
 
-      }
+      <View className='w-[428px] h-[84px] absolute bottom-[0px] pt-[16px] pb-[24px] px-[16px] gap-[10px] '>
+        <Button size='lg' variant='solid' action='primary' onPress={()=>router.push('/(tabs)/(home)/home')} className='w-[396px] h-[44px] rounded-[8px] border-[1px] border-[#C8F1D0] px-[24px] gap-[12px] bg-[#307CBE] flex flex-row justify-center items-center'>
+          <ButtonText className='text-[18px] font-[500] font-poppins text-[#FEFEFF]'>Add new reminder</ButtonText>
+        </Button>
       </View>
-          
-          
-
+    </View>
   );
-}
+};
+
+export default Index;

@@ -29,9 +29,9 @@ const ActiveMedicine = () => {
   };
 
   return (
-    <View className='w-[396px] h-[272px] mt-[16px] ml-[16px] gap-[16px]'>
+    <View className='w-[396px] h-[272px] mt-[16px] ml-[16px] gap-[16px] '>
       {medicines.map((item, index) => (
-        <View key={index} className='w-[396px] h-[80px] z-1 rounded-[12px] border-[1px] border-[#F2F1F1] p-[12px] gap-[16px] bg-[#FFFFFF] rounded-[12px] shadow-soft-1'>
+        <View key={index} className='w-[396px] h-[80px] relative rounded-[12px] border-[1px] border-[#F2F1F1] p-[12px] gap-[16px] bg-[#FFFFFF] rounded-[12px] shadow-soft-1'>
           <View className='w-[372px] h-[56px] gap-[12px] flex flex-row'>
             <View className='w-[56px] h-[56px] gap-[10px] rounded-[12px] bg-[#EAF2F9] relative'>
               <Image source={require('@/assets/images/Speech_Bubble.png')} className='w-[17.95px] h-[25.49px]' style={{top:12.58,left:20.72}} />
@@ -66,9 +66,9 @@ const ActiveMedicine = () => {
             </View>
           </View>
           {activeMenuIndex === index && (
-            <View className="absolute right-[30px] z-10 w-[210px] h-[143px] p-[4px] bg-[#FFFFFF] border-[1px] border-[#E6E6E6] rounded-[6px]">
+            <View className="absolute right-[30px]  z-50 w-[210px] h-[143px] p-[4px] bg-[#FFFFFF] border-[1px] border-[#E6E6E6] rounded-[6px]">
               <View className="w-[202px] h-[45px] p-[12px] gap-[8px] rounded-[4px] bg-[#FFFFFF]">
-                <TouchableOpacity onPress={() => handleMedication(index)}>
+                <TouchableOpacity onPress={() => handleMedication(index)} className='w-[178px] h-[21px]'>
                   <Text className="text-[14px] font-[400] font-poppins text-[#525252]">
                     {item.status === 'active' ? 'Pause medication' : 'Resume medication'}
                   </Text>
