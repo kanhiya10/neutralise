@@ -72,7 +72,7 @@ const DosageReminder = () => {
 
         Object.keys(dosageData).length >0 && dosageData.title &&(
       <View className='h-[21px] w-[397px] gap-[10px]'>
-      <Text className='text-[14px] font-[500] font-poppins text-[rgba(64, 64, 64, 1)]-800 '>{String(dosageData.title)}</Text>
+      <Text className='text-[14px] font-[500] font-poppins text-[#404040]'>{String(dosageData.title)}</Text>
       </View>
         )
 }

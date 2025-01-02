@@ -90,7 +90,7 @@ const SetAlarmCond = () => {
             case 'Specific days':
                 if (selectedDays.length > 0) {
                     console.log('Navigating to specific days with:', selectedDays);
-                    // dispatch(Increase());
+                    dispatch(Increase());
                     router.push({
                         pathname: `/(tabs)/(home)/specificDay`,
                         params: {
@@ -106,7 +106,7 @@ const SetAlarmCond = () => {
             case 'Interval':
                 if (time > 0) {
                     console.log('Navigating to interval with:', time, intervalUnit);
-                    // dispatch(Increase());
+                    dispatch(Increase());
                     router.push({
                         pathname: `/(tabs)/(home)/intervalDays`,
                         params: {
@@ -178,7 +178,8 @@ const SetAlarmCond = () => {
 
 
     return (
-        <View className='w-[397px] h-[575px] mt-[30px] left-[16px] gap-[6px]  '>
+        <View className='flex-1 mt-[30px]'>
+        <View className='w-[397px] h-[575px]  left-[16px] gap-[6px]  '>
             {/* Display the title if dosageData has a title */}
             {Object.keys(dosageData).length > 0 && dosageData.title && (
                 <View className="h-[21px] w-[397px] gap-[10px]">
@@ -187,7 +188,7 @@ const SetAlarmCond = () => {
             )}
 
 
-            <View className="h-[548px] w-[396px] rounded-[12px] border-[1px] p-[16px] gap-[16px] bg-[#ffffff] border-[#E6E6E6]">
+            <View className="h-[548px] w-[396px] rounded-[12px] border-[1px] p-[16px] gap-[16px] bg-[#ffffff] border-[#E6E6E6] shadow-soft-1">
                 {/* First reminder */}
                 <View className="h-[54px] w-[364px] gap-[10px] ">
                     <Text className="text-[18px] font-[500] font-poppins text-[#404040]">Which of these options works for your medication schedule?</Text>
@@ -314,7 +315,7 @@ const SetAlarmCond = () => {
                                     </View>
 
 
-                                    <Button variant='outline' className='h-[21px] w-[98px] gap-[14px] rounded-[8px] border-2 pr-[16px] pl-[16px] '>
+                                    <Button variant='outline' className='h-[21px] w-[98px] gap-[14px] rounded-[8px] border-0 pr-[16px] pl-[16px] '>
 
                                         <TouchableOpacity onPress={() => setTime(time > 0 ? time - 1 : time)}>
                                             <ButtonIcon as={RemoveIcon} />
@@ -330,8 +331,8 @@ const SetAlarmCond = () => {
 
                                     <Select className="h-[21px] w-[58px] gap-[6px] " onValueChange={setIntervalUnit} selectedValue={intervalUnit}>
 
-                                        <SelectTrigger className='border-[1px] w-[58px] h-[21px] flex flex-row'>
-                                            <SelectInput placeholder="hours" className='text-[11px] font-[400] font-poppins text-[#307CBE] h-[20px] w-[48px] border-[1px] ' />
+                                        <SelectTrigger className=' w-[58px] h-[21px] flex flex-row'>
+                                            <SelectInput placeholder="hours" className='text-[11px] font-[400] font-poppins text-[#307CBE] h-[20px] w-[48px]  ' />
                                             <SelectIcon as={ChevronDownIcon} className='text-[#307CBE] h-[14px] w-[10px]' />
                                         </SelectTrigger>
                                         <SelectPortal>
@@ -442,7 +443,7 @@ const SetAlarmCond = () => {
 
                         {
                             values === 'Cyclic' && (
-                                <View className='h-[0px] w-[348px] border-[1px] border-[#E6E6E6] my-[6px]'>
+                                <View className='h-[0px] w-[348px] border-[1px] border-[#E6E6E6] '>
 
                                 </View>
                             )
@@ -453,12 +454,12 @@ const SetAlarmCond = () => {
                         {
                             values === 'Cyclic' && (
                                 <View>
-                                    <View className='h-[21px] w-[348px] gap-[4px] flex flex-row justify-between border-2'>
+                                    <View className='h-[21px] w-[348px] gap-[4px] flex flex-row justify-between  '>
                                         <Text className='text-[14px] font-[400] font-poppins text-[#404040]'>Cycle</Text>
                                         
                                         <TouchableOpacity 
                                             onPress={() => setIsPickerVisible(true)}
-                                            className='h-[21px] w-[139px] flex flex-row items-center  '
+                                            className='h-[21px] w-[139px] flex flex-row items-center justify-start  '
                                         >
                                             <Text className='text-[14px] font-[400] text-[#307CBE] font-poppins w-[120px]'>
                                                 {cyclePeriod.intake > 0 
@@ -495,14 +496,18 @@ const SetAlarmCond = () => {
             </View>
 
 
-            <View className='h-[84px] w-[428px]  mt-[9px] pt-[16px] pb-[24px] pl-[16px] pr-[16px] gap-[10px] '>
-      <Button size='lg' variant='solid' action='primary' className='absolute bottom-[106px] w-[396px] h-[44px] rounded-[8px] pr-[24px] pl-[24px] gap-[12px] bg-[#307CBE] ' onPress={handleMultipleStates}  >
+       
+
+
+        </View>
+
+
+             <View className='h-[84px] w-[428px]  mt-[9px] pt-[16px] pb-[24px] pl-[16px] pr-[16px] gap-[10px] '>
+      <Button size='lg' variant='solid' action='primary' className=' w-[396px] h-[44px] rounded-[8px] pr-[24px] pl-[24px] gap-[12px] bg-[#307CBE] ' onPress={handleMultipleStates}  >
       <ButtonText className="font-[500] text-[18px] font-poppins text-[#FEFEFF]">Next</ButtonText>
       </Button>
 
     </View>
-
-
 
         </View>
 

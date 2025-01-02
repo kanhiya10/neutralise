@@ -25,8 +25,8 @@ const NewDateTimePicker: React.FC<DateTimePickerProps> = ({ isVisible, onClose, 
           {/* Picker section */}
           <View className="h-[244px] w-[396px] gap-[32px] flex-row justify-evenly">
             {/* Unit Picker */}
-            <View className="w-[73px] h-[244px] ">
-                <View className='h-[44px] w-[73px] pt-[12px] pb-[12px]'>
+            <View className="w-[73px] h-[244px]  ">
+                <View className='h-[44px] w-[73px] pt-[12px] '>
                 <Text className="text-center text-[14px] font-medium">Unit</Text>
                 </View>
               
@@ -48,7 +48,7 @@ const NewDateTimePicker: React.FC<DateTimePickerProps> = ({ isVisible, onClose, 
 
             {/* Intake Picker */}
             <View className="w-[73px] h-[244px] ">
-              <Text className="text-center text-[14px] font-medium">Intake</Text>
+              <Text className="text-center text-[14px] font-medium pt-[12px] ">Intake</Text>
               <Picker
                 selectedValue={selectedIntake}
                 onValueChange={(itemValue) => setSelectedIntake(itemValue)}>
@@ -60,7 +60,7 @@ const NewDateTimePicker: React.FC<DateTimePickerProps> = ({ isVisible, onClose, 
 
             {/* Pause Picker */}
             <View className="w-[73px] h-[244px] ">
-              <Text className="text-center text-[14px] font-medium">Pause</Text>
+                <Text className="text-center text-[14px] font-medium pt-[12px] ">Pause</Text>
               <Picker
                 selectedValue={selectedPause}
                 onValueChange={(itemValue) => setSelectedPause(itemValue)}>

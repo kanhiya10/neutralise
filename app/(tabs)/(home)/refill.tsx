@@ -37,8 +37,8 @@ const Refill=()=> {
 
 
   const handleRemind=()=>{
-    // dispatch(Increase());
-//    router.push(`/(tabs)/(home)/dosageAlarm`);
+    dispatch(Increase());
+   router.push(`/(tabs)/(home)/completion`);
 console.log('clicked');
   }
 

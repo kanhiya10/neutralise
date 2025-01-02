@@ -31,7 +31,7 @@ export default function IntervalDays() {
 
 
   const handleRefill=()=>{
-    // dispatch(Increase());
+    dispatch(Increase());
     console.log('go to refill')
     router.push(`/(tabs)/(home)/refill`);
   }
@@ -39,7 +39,7 @@ export default function IntervalDays() {
   return (
     <SharedLayout>
 
-      <View className='w-[397px] h-[575px] top-[30px] left-[16px] gap-[6px]  '>
+      <View className='w-[397px] h-[575px] mt-[30px] left-[16px] gap-[6px]  '>
         {/* Display the title if dosageData has a title */}
         {Object.keys(dosageData).length > 0 && dosageData.title && (
           <View className="h-[21px] w-[397px] gap-[10px]">
@@ -69,22 +69,19 @@ export default function IntervalDays() {
                 <View className="h-[24px] w-[364px] ">
                   <Text className="text-[16px] font-[400] text-[#404040]">Start date</Text>
                 </View>
-                {/* <CalendarPicker 
-                  selectedDate={selectedDate}
-                  onDateChange={setSelectedDate}
-                /> */}
-                 <Button
-        size="sm"
-        variant="outline"
-        action="primary"
-        onPress={() => setIsVisible(true)}
-        className="w-[100px] h-[37px] rounded-[8px] border-[1px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[8px] border-[#83B0D8]-300"
-      >
-        <ButtonIcon as={CalendarDaysIcon} />
-        <ButtonText className="font-[14px] font-[500] text-sm ml-2">
-          {format(selectedDate, 'dd MMM')}
-        </ButtonText>
-      </Button>
+              
+                <Button
+                        size="sm"
+                        variant="outline"
+                        action="primary"
+                        onPress={() => setIsVisible(true)}
+                        className="w-[100px] h-[37px] rounded-[8px] border-[1px] border-[#307CBE] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[8px] "
+                      >
+                        <ButtonIcon as={CalendarDaysIcon} />
+                        <ButtonText className="font-[14px] font-[500] text-sm ml-2 text-[#307CBE]">
+                          {format(selectedDate, 'dd MMM')}
+                        </ButtonText>
+                      </Button>
               </View>
 
 
@@ -98,9 +95,9 @@ export default function IntervalDays() {
                   size="sm"
                   variant="outline"
                   action="primary"
-                  className="w-[95px] h-[37px] rounded-[8px] border-[1px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[8px]"
+                  className="w-[95px] h-[37px] rounded-[8px] border-[1px] border-[#307CBE] pr-[10px] pl-[10px] pt-[8px] pb-[8px] gap-[8px]"
                 >
-                  <ButtonText className="font-medium text-sm ml-2">10:30 AM</ButtonText>
+                  <ButtonText className="font-[500] text-[14px] font-poppins text-[#307CBE]">10:30 AM</ButtonText>
                 </Button>
               </View>
 
@@ -116,9 +113,9 @@ export default function IntervalDays() {
                       size="sm"
                       variant="outline"
                       action="primary"
-                      className="w-[95px] h-[37px] rounded-[8px] border-[1px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[8px]"
+                      className="w-[95px] h-[37px] rounded-[8px] border-[1px] border-[#307CBE] pr-[10px] pl-[10px] pt-[8px] pb-[8px] gap-[8px]"
                     >
-                      <ButtonText className="font-medium text-sm ml-2">10:30 Pm</ButtonText>
+                      <ButtonText className="font-[500] text-[14px] font-poppins text-[#307CBE]">10:30 Pm</ButtonText>
                     </Button>
                   </View>
 
@@ -134,11 +131,11 @@ export default function IntervalDays() {
 
                 <View className="h-[37px] w-[127px] gap-[4px] flex flex-row justify-between">
                   <TouchableOpacity
-                    className="h-[37px] w-[98px] flex flex-row border-[1px] rounded-[8px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[14px]"
+                    className="h-[37px] w-[98px] flex flex-row border-[1px] border-[#307CBE] rounded-[8px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[14px]"
                     onPress={() => setDose(dose > 0 ? dose - 1 : dose)}
                   >
                     <Ionicons name="remove-outline" size={15} color={"gray"} />
-                    <Text>{dose}</Text>
+                    <Text className='text-[14px] font-[500] font-poppins text-[#307CBE]'>{dose}</Text>
                     <Ionicons name="add-outline" size={15} color={"gray"} onPress={() => setDose(dose + 1)} />
                   </TouchableOpacity>
                   <View className="h-[18px] w-auto top-2">
@@ -154,18 +151,14 @@ export default function IntervalDays() {
             </View>
           </View>
         </View>
+        </View>
 
-        <View className="h-[84px] w-[428px] top-[12px] flex justify-center items-center">
-        <Button
-          size="lg"
-          variant="solid"
-          action="primary"
-          className=" absolute bottom-[110px] w-[396px] h-[44px] rounded-[8px] pr-[24px] pl-[24px] gap-[12px] bg-[#307CBE]"
-          onPress={handleRefill}
-        >
-          <ButtonText className="font-medium text-sm ml-2">Next</ButtonText>
-        </Button>
-      </View>
+        <View className='h-[84px] w-[428px]  mt-[12px]  pt-[16px] pb-[24px] pl-[16px] pr-[16px] gap-[10px]  '>
+      <Button size='lg' variant='solid' action='primary' className='w-[396px] h-[44px] rounded-[8px] pr-[24px] pl-[24px] gap-[12px] bg-[#307CBE] ' onPress={handleRefill}  >
+      <ButtonText className="font-[500] text-[18px] font-poppins text-[#FEFEFF]">Next</ButtonText>
+      </Button>
+
+    </View>
 
       {isVisible && (
         <CalendarPicker 
@@ -178,7 +171,7 @@ export default function IntervalDays() {
         setIsVisible={setIsVisible}
         />
       )}
-      </View>
+      
     </SharedLayout>
   )
 }

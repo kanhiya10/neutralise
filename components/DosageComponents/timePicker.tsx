@@ -35,7 +35,7 @@ export default function TimePicker({ selectedTime, onTimeChange }: TimePickerPro
                 variant="outline"
                 action="primary"
                 onPress={showTimePicker}
-                className="w-[93px] h-[37px] rounded-[8px] border-[1px] pr-[10px] pl-[10px] pt-[8px] pb-[8px] gap-[8px]"//p is change
+                className="w-[93px] h-[37px] rounded-[8px] border-[1px] border-[#307CBE] pr-[10px] pl-[10px] pt-[8px] pb-[8px] gap-[8px]"//p is change
             >
                 <ButtonText className="font-[500] text-[14px] font-poppins text-[#307CBE]">{selectedTime}</ButtonText>
             </Button>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView,Image } from 'react-native';
 import { LinearGradient } from '../ui/gluestack-ui-provider/linear-gradient';
 import Stepper from './stepper';
 import { useRouter } from 'expo-router';
@@ -68,8 +68,9 @@ const SharedLayout: React.FC<SharedLayoutProps> = ({ children }) => {
           <Stepper currentStep={ScreenNo} />
         </View>
 
-        <View className=' h-[96px] w-[96px] mt-[30px] left-[159px] flex-row justify-center items-center '>
-          <MaterialIcons name="medical-services" size={100} color="rgb(79, 183, 224)" />
+        <View className=' h-[96px] w-[96px] mt-[30px] left-[159px] flex-row justify-center items-center  '>
+          {/* <MaterialIcons name="medical-services" size={100} color="rgb(79, 183, 224)" /> */}
+          <Image source={require('@/assets/images/MedHome1.png')} className='h-[96px] w-[96px]'/>
         </View>
 
         <View>

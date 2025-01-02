@@ -28,9 +28,9 @@ export default function SkipModal({ showModal, setShowModal }: SkipModalProps) {
             onRequestClose={() => setShowModal(false)}
         >
             <View className="flex-1 justify-center items-center bg-black/50">
-                <View className="w-[360px] h-[189px]  bg-[#FFFFFF] rounded-[6px] max-w-[360px] border-orange-500 border-2">
+                <View className="w-[360px] h-[189px]  bg-[#FFFFFF] rounded-[6px] max-w-[360px] ">
                     {/* Header */}
-                    <View className="flex-row justify-between items-center border-2 h-[69px] w-[360px] p-[24px]">
+                    <View className="flex-row justify-between items-center h-[69px] w-[360px] p-[24px]">
                         <Text className="text-[14px] font-[500] font-poppins text-[#262627]">
                             Proceed Without Refill?
                         </Text>
@@ -40,27 +40,27 @@ export default function SkipModal({ showModal, setShowModal }: SkipModalProps) {
                     </View>
 
                     {/* Body */}
-                    <View className=' h-[36px] w-[360px] pr-[24px] pl-[24px] gap-[8px] flex flex-row items-center border-2'>
+                    <View className=' h-[36px] w-[360px] pr-[66px] pl-[24px] gap-[8px]   '>
                     <Text className="text-[12px] font-[400] text-[#8C8C8C]">
-                        We wont be able to remind you to refill if you skip you to refill if you skip
+                        we wont be able to remind you to refill if you skip 
                     </Text>
                     </View>
                    
 
                     {/* Footer */}
                     <View className="flex-row gap-[8px] h-[84px] w-[360px] p-[24px] gap-[8px]">
-                        <Button size='sm' action='primary' variant='outline' 
-                            className=" h-[36px] w-[152px] justify-center items-center border-[1px] border-[#83B0D8] p-[16px] gap-[8px] rounded-[4px]"
+                        <TouchableOpacity 
                             onPress={handleCancel}
+                            className="h-[36px] w-[152px] justify-center items-center border-[1px] border-[#83B0D8] rounded-[4px]"
                         >
-                            <ButtonText className="text-[#307CBE] text-[14px] font-[500] font-poppins">Cancel</ButtonText>
-                        </Button>
-                        <Button size='sm' action='primary' variant='solid'  
-                            className=" h-[36px] w-[152px] justify-center items-center border-[1px] border-[#83B0D8] p-[16px] gap-[8px] rounded-[4px] bg-[#307CBE]"
+                            <Text className="text-[#307CBE] text-[14px] font-[500] font-poppins">Cancel</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
                             onPress={handleProceed}
+                            className="h-[36px] w-[152px] justify-center items-center rounded-[4px] bg-[#307CBE]"
                         >
-                            <ButtonText className="text-[#307CBE] text-[14px] font-[500] font-poppins">Yes</ButtonText>
-                        </Button>
+                            <Text className="text-[#FFFFFF] text-[14px] font-[500] font-poppins">Yes</Text>
+                        </TouchableOpacity>
 
                     </View>
                 </View>

@@ -9,6 +9,10 @@ import { useAppSelector } from '@/redux/store';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
 import { CalendarDaysIcon } from '@/components/ui/icon';
 import { useRouter } from 'expo-router';
+import { format } from 'date-fns';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Increase } from '@/redux/platformCount_Slice';
+import { useAppDispatch } from '@/redux/store';
 
 
 interface CyclicParams {
@@ -20,7 +24,7 @@ interface CyclicParams {
 const SpecificDay=()=> {
 
   const params= useLocalSearchParams();
-
+  const dispatch=useAppDispatch();
   
   
   
@@ -35,6 +39,11 @@ const SpecificDay=()=> {
 
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [cyclicData, setCyclicData] = useState<CyclicParams | null>(null);
+
+    const [isVisible, setIsVisible] = useState(false);
+    
+    const [selectedTime, setSelectedTime] = useState("10:30 AM");
+    const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
 
   useEffect(() => {
     try {
@@ -59,15 +68,29 @@ const SpecificDay=()=> {
   }
 
   const handleRefill=()=>{
-    // dispatch(Increase());
+    dispatch(Increase());
     console.log('go to refill')
     router.push(`/(tabs)/(home)/refill`);
   }
 
+  const showTimePicker = () => {
+    setTimePickerVisibility(true);  
+  };
+
+  const hideTimePicker = () => {
+    setTimePickerVisibility(false);
+  };
+
+  const handleTimeConfirm = (date: Date) => {
+    const formattedTime = format(date, 'hh:mm aa').toUpperCase();
+    setSelectedTime(formattedTime);
+    hideTimePicker();
+  };
+
   return (
     <SharedLayout>
 
-      <View className='w-[397px] h-[575px] top-[30px] left-[16px] gap-[6px] '>
+      <View className='w-[397px] h-[575px] mt-[30px] left-[16px] gap-[6px] '>
         {/* Display the title if dosageData has a title */}
         {Object.keys(dosageData).length > 0 && dosageData.title && (
           <View className="h-[21px] w-[397px] gap-[10px]">
@@ -91,7 +114,7 @@ const SpecificDay=()=> {
               </Text>
             </View>
 
-            <View className={selectedDays.length>0 ? "h-[239px] w-[364px] gap-[16px]" : "h-[88px] w-[364px] gap-[16px]"} >
+            <View className={selectedDays.length>0 ? "h-[239px] w-[364px] gap-[16px] " : "h-[88px] w-[364px] gap-[16px] "} >
 
 
               <View className={selectedDays.length>0 ? "h-[69px] w-[364px] gap-[8px] " : "h-[88px] w-[364px] gap-[8px]"} >
@@ -100,16 +123,32 @@ const SpecificDay=()=> {
                   <Text className="text-[16px] font-[400] text-[#404040]">Start date</Text>
                 </View>
                 {selectedDays.length>0 ? (
-                 <CalendarPicker 
-                 selectedDate={selectedDate}
-                 onDateChange={setSelectedDate}
-               />
+                <Button
+                        size="sm"
+                        variant="outline"
+                        action="primary"
+                        onPress={() => setIsVisible(true)}
+                        className="w-[100px] h-[37px] rounded-[8px] border-[1px] border-[#307CBE] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[8px] "
+                      >
+                        <ButtonIcon as={CalendarDaysIcon} />
+                        <ButtonText className="font-[14px] font-[500] text-sm ml-2 text-[#307CBE]">
+                          {format(selectedDate, 'dd MMM')}
+                        </ButtonText>
+                      </Button>
                 ) : (
                   <View className='h-[56px] w-[128px] gap-[4px]'>
-                     <CalendarPicker 
-                  selectedDate={selectedDate}
-                  onDateChange={setSelectedDate}
-                />
+                    <Button
+                            size="sm"
+                            variant="outline"
+                            action="primary"
+                            onPress={() => setIsVisible(true)}
+                            className="w-[100px] h-[37px] rounded-[8px] border-[1px] border-[#307CBE] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[8px] "
+                          >
+                            <ButtonIcon as={CalendarDaysIcon} />
+                            <ButtonText className="font-[14px] font-[500] text-sm ml-2 text-[#307CBE]">
+                              {format(selectedDate, 'dd MMM')}
+                            </ButtonText>
+                          </Button>
 
                 <View className='h-[15px] w-[128px] gap-[4px] flex flex-row'>
                   <Ionicons name="information-circle-outline" size={12} color={"#747474"} />
@@ -122,7 +161,7 @@ const SpecificDay=()=> {
 
               { selectedDays.length>0 && (
                 <>
-              <View className="h-[69px] w-[364px] gap-[8px]">
+              <View className="h-[69px] w-[364px] gap-[8px] ">
 
                 <View className="h-[24px] w-[364px] ">
                   <Text className="text-[16px] font-[400] text-[#404040]">Time</Text>
@@ -131,10 +170,18 @@ const SpecificDay=()=> {
                   size="sm"
                   variant="outline"
                   action="primary"
-                  className="w-[95px] h-[37px] rounded-[8px] border-[1px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[8px]"
+                  onPress={showTimePicker}
+                  className="w-[95px] h-[37px] rounded-[8px] border-[1px] border-[#307CBE] pr-[10px] pl-[10px] pt-[8px] pb-[8px] gap-[8px]"
                 >
-                  <ButtonText className="font-medium text-sm ml-2">10:30 AM</ButtonText>
+                  <ButtonText className="font-[500] text-[14px] font-poppins text-[#307CBE]">{selectedTime}</ButtonText>
                 </Button>
+
+                <DateTimePickerModal
+                  isVisible={isTimePickerVisible}
+                  mode="time"
+                  onConfirm={handleTimeConfirm}
+                  onCancel={hideTimePicker}
+                />
               </View>
 
 
@@ -144,11 +191,11 @@ const SpecificDay=()=> {
                 </View>
                 <View className="h-[37px] w-[127px] gap-[4px] flex flex-row justify-between">
                   <TouchableOpacity
-                    className="h-[37px] w-[98px] flex flex-row border-[1px] rounded-[8px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[14px]"
+                    className="h-[37px] w-[98px] flex flex-row border-[1px] border-[#307CBE] rounded-[8px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[14px]"
                     onPress={() => setDose(dose > 0 ? dose - 1 : dose)}
                   >
                     <Ionicons name="remove-outline" size={15} color={"gray"} />
-                    <Text>{dose}</Text>
+                    <Text className='text-[14px] font-[500] font-poppins text-[#307CBE] align-center'>{dose}</Text>
                     <Ionicons name="add-outline" size={15} color={"gray"} onPress={() => setDose(dose + 1)} />
                   </TouchableOpacity>
                   <View className="h-[18px] w-auto top-2">
@@ -163,18 +210,28 @@ const SpecificDay=()=> {
           </View>
         </View>
 
-        <View className="h-[84px] w-[428px] top-[12px] flex justify-center items-center">
-        <Button
-          size="lg"
-          variant="solid"
-          action="primary"
-          className=" absolute bottom-[110px] w-[396px] h-[44px] rounded-[8px] pr-[24px] pl-[24px] gap-[12px] bg-[#307CBE]"
-          onPress={handleRefill}
-        >
-          <ButtonText className="font-medium text-sm ml-2">Next</ButtonText>
-        </Button>
-      </View>
-      </View>
+        </View>
+
+        <View className='h-[84px] w-[428px]  mt-[12px]  pt-[16px] pb-[24px] pl-[16px] pr-[16px] gap-[10px]  '>
+      <Button size='lg' variant='solid' action='primary' className='w-[396px] h-[44px] rounded-[8px] pr-[24px] pl-[24px] gap-[12px] bg-[#307CBE] ' onPress={handleRefill}  >
+      <ButtonText className="font-[500] text-[18px] font-poppins text-[#FEFEFF]">Next</ButtonText>
+      </Button>
+
+    </View>
+
+
+            {isVisible && (
+              <CalendarPicker 
+              selectedDate={selectedDate}
+              onDateChange={(date)=>{
+                setSelectedDate(date);
+                setIsVisible(false);
+              }}
+              isVisible={isVisible}
+              setIsVisible={setIsVisible}
+              />
+            )}
+      
     </SharedLayout>
   )
 }

@@ -36,9 +36,9 @@ const router = useRouter();
 
   const [times, setTimes] = useState<string[]>(Array(time).fill('08:30 AM'));
 
-  useEffect(() => {
-    dispatch(Increase());
-  }, [dosageData.frequency]);
+  // useEffect(() => {
+  //   dispatch(Increase());
+  // }, [dosageData.frequency]);
 
 
 const handleRefill=()=>{
@@ -119,7 +119,7 @@ const handleRefill=()=>{
             </View>
             <View className="h-[37px] w-auto gap-[12px] flex flex-row">
               <TouchableOpacity
-                className="h-[37px] w-[98px] flex flex-row border-[1px] rounded-[8px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[14px]"
+                className="h-[37px] w-[98px] flex flex-row border-[1px] border-[#307CBE] rounded-[8px] pr-[16px] pl-[16px] pt-[8px] pb-[8px] gap-[14px]"
               >
                 <Ionicons 
                   name="remove-outline" 
@@ -146,8 +146,9 @@ const handleRefill=()=>{
   };
 
   const content = (
+    <View className='flex-1 mt-[30px] '>
     
-    <View className='w-[397px] h-[575px]  top-[30px] left-[16px] gap-[6px]  '>
+    <View className='w-[397px] h-[575px]   left-[16px] gap-[6px]   '>
       {
       Object.keys(dosageData).length >0 && dosageData.title &&(
   <View className='h-[21px] w-[397px] gap-[10px]'>
@@ -168,25 +169,17 @@ const handleRefill=()=>{
         </ScrollView>
       </View>
       
+    </View>
 
-      {/* <View className="h-[84px] w-[428px] top-[12px] flex justify-center items-center">
-        <Button
-          size="lg"
-          variant="solid"
-          action="primary"
-          className="w-[396px] h-[44px] rounded-[8px] pr-[24px] pl-[24px] gap-[12px] bg-[#307CBE]"
-          onPress={handleRefill}
-        >
-          <ButtonText className="font-medium text-sm ml-2">Next</ButtonText>
-        </Button>
-      </View> */}
 
-<View className='h-[84px] w-[428px]  mt-[12px] pt-[16px] pb-[24px] pl-[16px] pr-[16px] gap-[10px] border-2'>
-      <Button size='lg' variant='solid' action='primary' className=' absolute bottom-[106px] w-[396px] h-[44px] rounded-[8px] pr-[24px] pl-[24px] gap-[12px] bg-[#307CBE] ' onPress={handleRefill}  >
+<View className='h-[84px] w-[428px]  mt-[12px] pt-[16px]  pb-[24px] pl-[16px] pr-[16px] gap-[10px] '>
+      <Button size='lg' variant='solid' action='primary' className='  w-[396px] h-[44px] rounded-[8px] pr-[24px] pl-[24px] gap-[12px] bg-[#307CBE] ' onPress={handleRefill}  >
       <ButtonText className="font-[500] text-[18px] font-poppins text-[#FEFEFF]">Next</ButtonText>
       </Button>
 
     </View>
+
+
     </View>
     
   );

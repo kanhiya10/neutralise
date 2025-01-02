@@ -29,12 +29,18 @@ const DoseFrequency=()=> {
 
   const handleRemind=()=>{
     dispatch(Add({frequency:values}))
-    dispatch(Increase());
-   router.push(`/(tabs)/(home)/dosageAlarm`);
+    
+    // Only increase counter if not "More options"
+    if (values !== 'More options') {
+      dispatch(Increase());
+    }
+    
+    router.push(`/(tabs)/(home)/dosageAlarm`);
   }
 
   return (
     <SharedLayout>
+      {/* <View className='border-2'> */}
 
     <View className='w-[397px] h-[575px] mt-[30px] left-[16px] gap-[6px] '>
 
@@ -102,7 +108,7 @@ const DoseFrequency=()=> {
 
     
 
-    
+    {/* </View> */}
 
   </SharedLayout>
   )
