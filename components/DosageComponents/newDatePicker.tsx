@@ -18,6 +18,28 @@ const NewDateTimePicker: React.FC<DateTimePickerProps> = ({ isVisible, onClose, 
   const pauseDays = Array.from({ length: 40 }, (_, i) => i + 1);
   const units = ['Days', 'Weeks'];
 
+  // Modify the available options based on selected unit
+  const getIntakeOptions = () => {
+    if (selectedUnit === 'Weeks') {
+      return Array.from({ length: 12 }, (_, i) => i + 1); // 1-12 weeks
+    }
+    return Array.from({ length: 50 }, (_, i) => i + 1); // 1-50 days
+  };
+
+  const getPauseOptions = () => {
+    if (selectedUnit === 'Weeks') {
+      return Array.from({ length: 12 }, (_, i) => i + 1); // 1-12 weeks
+    }
+    return Array.from({ length: 40 }, (_, i) => i + 1); // 1-40 days
+  };
+
+  // Reset values when unit changes to prevent invalid selections
+  const handleUnitChange = (newUnit: string) => {
+    setSelectedUnit(newUnit);
+    setSelectedIntake(1);
+    setSelectedPause(1);
+  };
+
   return (
     <Modal visible={isVisible} transparent={true} animationType="slide">
       <View className="flex-1  justify-end bg-black/50">
@@ -25,47 +47,39 @@ const NewDateTimePicker: React.FC<DateTimePickerProps> = ({ isVisible, onClose, 
           {/* Picker section */}
           <View className="h-[244px] w-[396px] gap-[32px] flex-row justify-evenly">
             {/* Unit Picker */}
-            <View className="w-[73px] h-[244px]  ">
-                <View className='h-[44px] w-[73px] pt-[12px] '>
+            <View className="w-[73px] h-[244px]">
+              <View className='h-[44px] w-[73px] pt-[12px]'>
                 <Text className="text-center text-[14px] font-medium">Unit</Text>
-                </View>
-              
-
-              <View>
-
-              
-
-
+              </View>
               <Picker
                 selectedValue={selectedUnit}
-                onValueChange={(itemValue) => setSelectedUnit(itemValue)}>
+                onValueChange={handleUnitChange}>
                 {units.map((unit) => (
-                  <Picker.Item label={unit} value={unit} key={unit}  />
+                  <Picker.Item label={unit} value={unit} key={unit} />
                 ))}
               </Picker>
-              </View>
             </View>
 
             {/* Intake Picker */}
-            <View className="w-[73px] h-[244px] ">
-              <Text className="text-center text-[14px] font-medium pt-[12px] ">Intake</Text>
+            <View className="w-[73px] h-[244px]">
+              <Text className="text-center text-[14px] font-medium pt-[12px]">Intake</Text>
               <Picker
                 selectedValue={selectedIntake}
                 onValueChange={(itemValue) => setSelectedIntake(itemValue)}>
-                {intakeDays.map((day) => (
-                  <Picker.Item label={day.toString()} value={day} key={day} />
+                {getIntakeOptions().map((value) => (
+                  <Picker.Item label={value.toString()} value={value} key={value} />
                 ))}
               </Picker>
             </View>
 
             {/* Pause Picker */}
-            <View className="w-[73px] h-[244px] ">
-                <Text className="text-center text-[14px] font-medium pt-[12px] ">Pause</Text>
+            <View className="w-[73px] h-[244px]">
+              <Text className="text-center text-[14px] font-medium pt-[12px]">Pause</Text>
               <Picker
                 selectedValue={selectedPause}
                 onValueChange={(itemValue) => setSelectedPause(itemValue)}>
-                {pauseDays.map((day) => (
-                  <Picker.Item label={day.toString()} value={day} key={day} />
+                {getPauseOptions().map((value) => (
+                  <Picker.Item label={value.toString()} value={value} key={value} />
                 ))}
               </Picker>
             </View>
